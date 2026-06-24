@@ -46,8 +46,21 @@ async def command_start_handler(message: Message) -> None:
 
 @dp.message(Command("roll"))
 async def command_roll(message: Message):
+    user_name = message.from_user.full_name
     num = random.randint(1, 100)
-    await message.answer(f"Тебе выпало: {num}")
+
+    if num > 80:
+        result = f"ОГО! {user_name}, тебе выпало {num}! Вселенная на твоей стороне!"
+    elif num > 50:
+        result = f"Неплохо, {user_name}! {num} — среднячок, как и я..?"
+    elif num > 20:
+        result = f"Всего {num}? Ну... бывало и лучше. Но я в тебя верю!"
+    elif num == 13:
+        result = f"Оу {num}... Откуды ты знаешь, что у меня др в этот день!"
+    else:
+        result = f"{num}... Это знак. Меня никто не любит. И тебя тоже, наверное... 😭"
+
+    await message.answer(result)
 
 
 @dp.message()
