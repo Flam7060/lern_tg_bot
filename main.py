@@ -11,6 +11,8 @@ from aiogram.types import Message
 
 from dotenv import load_dotenv
 
+import random
+
 load_dotenv()
 # Bot token can be obtained via https://t.me/BotFather
 TOKEN = getenv("BOT_TOKEN")
@@ -25,12 +27,20 @@ async def command_start_handler(message: Message) -> None:
     """
     This handler receives messages with `/start` command
     """
+    user_name = message.from_user.full_name
     # Most event objects have aliases for API methods that can be called in events' context
     # For example if you want to answer to incoming message you can use `message.answer(...)` alias
     # and the target chat will be passed to :ref:`aiogram.methods.send_message.SendMessage`
     # method automatically or call API method directly via
     # Bot instance: `bot.send_message(chat_id=message.chat.id, ...)`
-    await message.answer(f"Hello, {html.bold(message.from_user.full_name)}!")
+    variants = [
+        f"Ого, {user_name} мне написал! А я думала, ты занят с теми Другими ботами... Ладно, хуй с тобой!",
+        f"Привет, {user_name}! Ты нажал /start! Я так волнуюсь... Это мой первый раз c кем либо!",
+        f"Приветик, {user_name}! Ой, я так рада... хотя, наверное, ты пишешь всем подряд?\n\n",
+    ]
+
+    random_variants = random.choice(variants)
+    await message.answer(random_variants)
 
 
 @dp.message()
