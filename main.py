@@ -7,6 +7,7 @@ from aiogram import Bot, Dispatcher, html
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
+from aiogram.filters import Command
 from aiogram.types import Message
 
 from dotenv import load_dotenv
@@ -41,6 +42,12 @@ async def command_start_handler(message: Message) -> None:
 
     random_variants = random.choice(variants)
     await message.answer(random_variants)
+
+
+@dp.message(Command("roll"))
+async def command_roll(message: Message):
+    num = random.randint(1, 100)
+    await message.answer(f"Тебе выпало: {num}")
 
 
 @dp.message()
