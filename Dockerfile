@@ -9,6 +9,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy
 
+# Непривилегированный пользователь: контейнер не должен работать от root
+RUN useradd --create-home --uid 1000 appuser && chown appuser:appuser /app
+USER appuser
+
 # 1) Сначала только манифесты — слой с зависимостями кешируется,
 #    пока pyproject.toml / uv.lock не меняются
 COPY pyproject.toml uv.lock ./

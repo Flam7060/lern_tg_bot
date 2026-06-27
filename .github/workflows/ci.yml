@@ -5,6 +5,10 @@ on:
     branches: [main, dev]
   pull_request:
 
+# По умолчанию GITHUB_TOKEN получает write-all — сужаем до чтения
+permissions:
+  contents: read
+
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest

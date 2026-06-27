@@ -1,17 +1,25 @@
-# MegaLinter: только то, что НЕ покрывает ruff.
 # Python отдан ruff (см. .github/workflows/ci.yml), здесь он выключен.
 APPLY_FIXES: none
 
-# Гоняем лишь нужные языки/анализаторы:
+
 ENABLE:
   - DOCKERFILE   # hadolint
   - YAML         # yamllint
   - REPOSITORY   # секреты (gitleaks), проверки репозитория
   - MARKDOWN     # markdownlint
 
-# Явно вырубаем Python, чтобы не дублировать и не конфликтовать с ruff
 DISABLE:
   - PYTHON
+
+# devskim в этом образе крашится (.NET assembly load error), а не находит
+DISABLE_LINTERS:
+  - REPOSITORY_DEVSKIM
+
+# kics: глушим отложенные/неактуальные правила
+#   b03a748a... — HEALTHCHECK в Dockerfile (отложено)
+#   698ed579... — HEALTHCHECK в compose (отложено)
+#   555ab8f9... — пиннинг GitHub Actions к SHA (для учебного репо не делаем)
+REPOSITORY_KICS_ARGUMENTS: "--exclude-queries b03a748a-542d-44f4-bb86-9199ab4fd2d5,698ed579-b239-4f8f-a388-baa4bcb13ef8,555ab8f9-2001-455e-a077-f2d0f41e2fb9"
 
 SHOW_ELAPSED_TIME: true
 FILEIO_REPORTER: false

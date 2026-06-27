@@ -1,11 +1,22 @@
 services:
   bot:
     build: .
-    # BOT_TOKEN и прочие переменные берутся из .env рядом с этим файлом
     env_file:
       - .env
     restart: unless-stopped
-    # Бот только исходящие запросы делает (long polling) — порты наружу не нужны
+    # Запретить процессам повышать привилегии внутри контейнера
+    security_opt:
+      - no-new-privileges:true
+    # Сбросить все Linux capabilities
+    cap_drop:
+      - ALL
+
+    # Авто-перезапуск при изменении кода. `docker compose watch`;
+    # обычный `up` это игнорирует
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./app
+          target: /app/app
 
 # Когда появятся БД/Redis — добавляются сюда же как новые сервисы,
-# а bot получает depends_on: [db] и связь по имени сервиса.

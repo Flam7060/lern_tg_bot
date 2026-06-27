@@ -4,7 +4,7 @@ UV      ?= uv
 COMPOSE ?= docker compose
 ML_IMAGE ?= oxsecurity/megalinter:v8
 
-.PHONY: help install run lint format fix test ci megalinter ci-full build up down logs clean
+.PHONY: help install run lint format fix test ci megalinter ci-full build up up-dev down reload destroy logs clean
 
 help: ## показать список команд
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -48,8 +48,17 @@ build: ## собрать образ
 up: ## поднять бота в docker (фон)
 	$(COMPOSE) up -d
 
+up-dev: ## дев-режим: docker с авто-перезапуском при правках
+	$(COMPOSE) watch
+
 down: ## остановить docker
 	$(COMPOSE) down
+
+reload: ## пересобрать образ и перезапустить
+	$(COMPOSE) up -d --build
+
+destroy: ## снести контейнеры, образ и тома проекта
+	$(COMPOSE) down --rmi local --volumes --remove-orphans
 
 logs: ## смотреть логи docker
 	$(COMPOSE) logs -f
