@@ -1,0 +1,17 @@
+# MegaLinter: только то, что НЕ покрывает ruff.
+# Python отдан ruff (см. .github/workflows/ci.yml), здесь он выключен.
+APPLY_FIXES: none
+
+# Гоняем лишь нужные языки/анализаторы:
+ENABLE:
+  - DOCKERFILE   # hadolint
+  - YAML         # yamllint
+  - REPOSITORY   # секреты (gitleaks), проверки репозитория
+  - MARKDOWN     # markdownlint
+
+# Явно вырубаем Python, чтобы не дублировать и не конфликтовать с ruff
+DISABLE:
+  - PYTHON
+
+SHOW_ELAPSED_TIME: true
+FILEIO_REPORTER: false

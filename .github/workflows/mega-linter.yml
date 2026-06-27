@@ -1,0 +1,23 @@
+name: MegaLinter
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  megalinter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: MegaLinter
+        uses: oxsecurity/megalinter@v8
+        env:
+          # Python уже проверяет ruff в ci.yml — здесь только не-Python
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
