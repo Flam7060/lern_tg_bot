@@ -15,3 +15,19 @@ dev = [
     "pytest>=9.1.1",
     "ruff>=0.15.19",
 ]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 88
+
+[tool.ruff.lint]
+# F-pyflakes, E/W-pycodestyle, I-isort(импорты), B-bugbear,
+# UP-pyupgrade, S-bandit(безопасность)
+select = ["F", "E", "W", "I", "B", "UP", "S"]
+# S311: random не криптостойкий — для игрового кубика это ок
+# E501: длину строк контролирует `ruff format`, литералы он не ломает
+ignore = ["S311", "E501"]
+
+[tool.ruff.lint.per-file-ignores]
+# в тестах assert-ы это норма, S101 не нужен
+"tests/**" = ["S101"]
